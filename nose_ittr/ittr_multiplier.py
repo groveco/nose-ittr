@@ -94,12 +94,12 @@ class IttrMultiplier(type):
         def injector(*fargs, **fkeywords):
             # transfer ittr and attr to self when called
             self = fargs[0]
-            for name, value in keywords.iteritems():
+            for name, value in keywords.items():
                 setattr(self, name, value)
             return func(*fargs, **fkeywords)
 
         # transfers all attr and ittr to newfunc
-        for name, value in keywords.iteritems():
+        for name, value in keywords.items():
             setattr(injector, name, value)
         setattr(injector, 'keywords', keywords)
         return injector
