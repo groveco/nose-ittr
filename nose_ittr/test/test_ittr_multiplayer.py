@@ -4,18 +4,14 @@ import string
 
 from nose.tools import nottest, ok_, assert_equal, assert_false, assert_in
 from nose.plugins.attrib import attr
-
-from nose_ittr import IttrMultiplier, ittr
+from nose_ittr.ittr_multiplier import IttrMultiplier, ittr
 
 
 class TestMetaClassIttrMultiplayer(object):
 
-
-
     def setup(self):
         self.test_class_one = test_class_one()
         self.test_class_two = test_class_two()
-
 
     def teardown(self):
         pass
@@ -25,11 +21,12 @@ class TestMetaClassIttrMultiplayer(object):
         """
         Test metaclass set ittr attributes in mirrors functions
         """
-        ok_(hasattr(self.test_class_one.test_method_8_val_a_val_b_val_c,
+        print(dir(self.test_class_one))
+        ok_(hasattr(self.test_class_one.test_method_8_val_c_val_a_val_b,
                     'attr_one'))
-        ok_(hasattr(self.test_class_one.test_method_8_val_a_val_b_val_c,
+        ok_(hasattr(self.test_class_one.test_method_8_val_c_val_a_val_b,
                     'attr_two'))
-        ok_(hasattr(self.test_class_one.test_method_8_val_a_val_b_val_c,
+        ok_(hasattr(self.test_class_one.test_method_8_val_c_val_a_val_b,
                     'attr_three'))
 
     @attr(id=2)
@@ -38,11 +35,11 @@ class TestMetaClassIttrMultiplayer(object):
         Tests metaclass adds ittr attribute to test
         """
         assert_in('attr_one',
-                  self.test_class_one.test_method_8_val_a_val_b_val_c.ittr)
+                  self.test_class_one.test_method_8_val_c_val_a_val_b.ittr)
         assert_in('attr_two',
-                  self.test_class_one.test_method_8_val_a_val_b_val_c.ittr)
+                  self.test_class_one.test_method_8_val_c_val_a_val_b.ittr)
         assert_in('attr_three',
-                  self.test_class_one.test_method_8_val_a_val_b_val_c.ittr)
+                  self.test_class_one.test_method_8_val_c_val_a_val_b.ittr)
 
     @attr(id=3)
     def test_self_modification_by_test_method(self):
@@ -67,8 +64,8 @@ class TestMetaClassIttrMultiplayer(object):
         ok_(hasattr(self.test_class_one, 'test_method_7_val_a_val_c'))
         ok_(hasattr(self.test_class_one, 'test_method_7_val_b_val_c'))
         ok_(hasattr(self.test_class_one, 'test_method_7_val_b_val_c'))
-        ok_(hasattr(self.test_class_one, 'test_method_8_val_a_val_b_val_c'))
-        ok_(hasattr(self.test_class_one, 'test_method_8_val_a_val_b_val_d'))
+        ok_(hasattr(self.test_class_one, 'test_method_8_val_c_val_a_val_b'))
+        ok_(hasattr(self.test_class_one, 'test_method_8_val_d_val_a_val_b'))
         ok_(hasattr(self.test_class_one, 'test_method_9_val_a_val_c'))
         ok_(hasattr(self.test_class_one, 'test_method_9_val_b_val_c'))
         ok_(hasattr(self.test_class_one, 'test_method_9_val_b_val_c'))
@@ -81,7 +78,7 @@ class TestMetaClassIttrMultiplayer(object):
         Verify correct number of methods duplicated based on ittr
         """
         res = filter(lambda x: 'test' in x or None, dir(self.test_class_one))
-        assert_equal(len(res), 21)
+        assert_equal(sum(1 for _ in res), 21)
 
     @attr(id=6)
     def test_original_method_has_notest_hook(self):
@@ -111,9 +108,8 @@ class TestMetaClassIttrMultiplayer(object):
 
 
 @nottest
-class test_class_two(object):
+class test_class_two(object, metaclass=IttrMultiplier):
 
-    __metaclass__ = IttrMultiplier
     __ittr__ = {'os': ['linux', 'mac']}
 
     def test_method_1(self):
@@ -123,12 +119,11 @@ class test_class_two(object):
     @ittr(ittr_val=['val_a', 'val_b'])
     def test_method_2(self):
         """Test method docstring"""
+        print(dir(self))
         pass
 
 @nottest
-class test_class_one(object):
-
-    __metaclass__ = IttrMultiplier
+class test_class_one(object, metaclass=IttrMultiplier):
 
     @ittr(attr_one=[])
     def test_method_1(self):
