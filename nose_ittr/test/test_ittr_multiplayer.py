@@ -72,7 +72,7 @@ class TestMetaClassIttrMultiplayer(object):
         ok_(hasattr(self.test_class_one, 'test_method_9_val_a_val_c'))
         ok_(hasattr(self.test_class_one, 'test_method_9_val_b_val_c'))
         ok_(hasattr(self.test_class_one, 'test_method_9_val_b_val_c'))
-        ok_(hasattr(self.test_class_one, 'test_method_10_val_a_val_d_val_b'))
+        ok_(hasattr(self.test_class_one, 'test_method_10_val_a_val_b_val_d'))
         ok_(hasattr(self.test_class_one, 'test_method_11_val_a__'))
 
     @attr(id=5)
@@ -80,7 +80,7 @@ class TestMetaClassIttrMultiplayer(object):
         """
         Verify correct number of methods duplicated based on ittr
         """
-        res = filter(lambda x: 'test' in x or None, dir(self.test_class_one))
+        res = list(filter(lambda x: 'test' in x or None, dir(self.test_class_one)))
         assert_equal(len(res), 21)
 
     @attr(id=6)
@@ -102,18 +102,17 @@ class TestMetaClassIttrMultiplayer(object):
     def test_class_decorator(self):
         ok_(hasattr(self.test_class_two, 'test_method_1_linux'))
         ok_(hasattr(self.test_class_two, 'test_method_1_mac'))
-        ok_(hasattr(self.test_class_two, 'test_method_2_val_a_linux'))
-        ok_(hasattr(self.test_class_two, 'test_method_2_val_a_mac'))
-        ok_(hasattr(self.test_class_two, 'test_method_2_val_b_linux'))
-        ok_(hasattr(self.test_class_two, 'test_method_2_val_b_mac'))
+        ok_(hasattr(self.test_class_two, 'test_method_2_linux_val_a'))
+        ok_(hasattr(self.test_class_two, 'test_method_2_mac_val_a'))
+        ok_(hasattr(self.test_class_two, 'test_method_2_linux_val_b'))
+        ok_(hasattr(self.test_class_two, 'test_method_2_mac_val_b'))
 
 
 
 
 @nottest
-class test_class_two(object):
+class test_class_two(object, metaclass=IttrMultiplier):
 
-    __metaclass__ = IttrMultiplier
     __ittr__ = {'os': ['linux', 'mac']}
 
     def test_method_1(self):
@@ -126,9 +125,7 @@ class test_class_two(object):
         pass
 
 @nottest
-class test_class_one(object):
-
-    __metaclass__ = IttrMultiplier
+class test_class_one(object, metaclass=IttrMultiplier):
 
     @ittr(attr_one=[])
     def test_method_1(self):

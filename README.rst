@@ -1,5 +1,7 @@
 nose-ittr
 =========
+This is a Python 3 port of the nose-ittr extension created by Sergey Ragatsky.
+
 nose extension for supporting parametrized testing.
 ---------------------------------------------------
 Allows developer to run the same test over and over again using different values
@@ -15,7 +17,7 @@ Installation:
 
 .. code-block:: shell
 
-    pip install nose_ittr
+    pip3 install nose_ittr
 
 Basic usage:
 ------------
@@ -27,17 +29,8 @@ Basic usage:
     from nose.tools import assert_equal, assert_not_equal
     from nose_ittr import IttrMultiplier, ittr
 
-    class TestFoo(object):
+    class TestFoo(object, metaclass=IttrMultiplier):
         
-        __metaclass__ = IttrMultiplier
-        
-        def setup(self):
-            if hasattr(self, 'value'):
-                self.value += 3
-        
-        def teardown(self):
-            pass
-            
         @ittr(number=[1, 2, 3, 4])
         def test_even(self):
             assert_equal(self.number % 2, 0)            
@@ -89,3 +82,7 @@ To change the docstring printout based on the varibales passed to test, use the 
     Roy Klinger 
  
     Maroun Maroun
+
+    Siobhan Dolan
+
+    Kate Kligman

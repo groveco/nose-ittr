@@ -15,7 +15,7 @@ class SetupIttr(Plugin):
     def beforeTest(self, test):
         try:
             if hasattr(test.test.__dict__['test'], 'ittr'):
-                for key, value in test.test.__dict__['test'].ittr.iteritems():
+                for key, value in test.test.__dict__['test'].ittr.items():
                     setattr(test.context, key, value)
         except KeyError:
             return
@@ -23,7 +23,7 @@ class SetupIttr(Plugin):
     def afterTest(self, test):
         try:
             if hasattr(test.test.__dict__['test'], 'ittr'):
-                for key, value in test.test.__dict__['test'].ittr.iteritems():
+                for key, value in test.test.__dict__['test'].ittr.items():
                     delattr(test.context, key)
         except KeyError:
             return

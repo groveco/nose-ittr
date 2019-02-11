@@ -3,7 +3,6 @@ __author__ = 'Sergey'
 import os
 import io
 from setuptools import setup, find_packages
-
 from nose_ittr.ittr_multiplier import __version__
 
 here = os.path.abspath(os.path.dirname(__file__))
@@ -31,7 +30,7 @@ long_description = read('README.rst', 'CHANGES.txt')
 setup(
     name='nose_ittr',
     version=__version__,
-    url='https://github.com/taykey/nose-ittr',
+    url='https://github.com/groveco/nose-ittr',
     license='Apache Software License',
     author='Sergey Ragatsky',
     author_email = "serg@taykey.com",
