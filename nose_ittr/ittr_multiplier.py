@@ -1,5 +1,5 @@
 __author__ = 'Sergey Ragatsky'
-__version__ = '0.0.4'
+__version__ = '0.0.5'
 
 import re
 import logging
@@ -20,6 +20,7 @@ def ittr(*args, **kwargs):
         ittr_dict.update(ittrs)
         ittr_dict.update(kwargs)
         setattr(func, 'ittr', ittr_dict)
+
         return func
     return update_attr
 
@@ -34,8 +35,8 @@ class IttrMultiplier(type):
         # check if the class been multiplied by IttrMultiplier
         if dct.get('is_multiplied'):
             return type.__new__(mcs, name, bases, dct)
-        newfunc_dct = {}
-        for attribute_name, attribute in dct.items():
+
+        for attribute_name, attribute in dct.copy().items():
             # if not a method continue
             if not type(attribute) == FunctionType:
                 logging.debug('attribute {0} is not a method'.format(attribute_name))
@@ -51,41 +52,45 @@ class IttrMultiplier(type):
             if not hasattr(attribute, 'ittr') or not attribute.ittr:
                 logging.debug('method {0} has not attr decorator'.format(attribute_name))
                 continue
-            items = attribute.ittr
-            b = []
 
-            keys = items.keys()
-            vals = items.values()
+            # create product of all the iterators
+            keys = sorted(attribute.ittr.keys())
+            vals = sorted(attribute.ittr.values())
             all_combos = product(*vals)
+
+            products = []
             for val in all_combos:
-                b.append(dict(zip(keys, val)))
-            products = b
+                products.append(dict(zip(keys, val)))
+
             for prod in products:
-                suffix = '_'.join(prod.values())
-                print('method suffix: {0}'.format(suffix))
+                logging.debug('method product: {0}'.format(prod))
+                suffix = re.sub(r'\W+', '',
+                                str(list(prod.values()))
+                                .translate({ord(c): None for c in "[]'"})
+                                .replace(',', '_'))
+                logging.debug('method suffix: {0}'.format(suffix))
 
                 # in case itts passed are empty
                 if not suffix:
                     logging.debug('Empty suffix, product: {0}'.format(prod))
                     continue
                 new_func_name = attribute_name + '_' + suffix
+
                 # combine both product and ittr dict to be added to new method
                 func_params = dict(attribute.__dict__, **prod)
                 mirror_func = mcs._attribute_injector(attribute, **func_params)
                 setattr(mirror_func, 'ittr', prod)
 
                 # assign new name and docstring and save back at our class
-                mirror_func.func_name = new_func_name
-                mirror_func.func_doc = attribute.__doc__
-                newfunc_dct[new_func_name] = mirror_func
+                mirror_func.__name__ = new_func_name
+                mirror_func.__doc__ = attribute.__doc__
+                dct[new_func_name] = mirror_func
 
             # set no test flag to original test method
             attribute.__test__ = False
 
         # mark has been multiplied
         dct['is_multiplied'] = True
-        if newfunc_dct:
-            dct.update(newfunc_dct)
         return type.__new__(mcs, name, bases, dct)
 
     @classmethod
