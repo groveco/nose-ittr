@@ -54,8 +54,8 @@ class IttrMultiplier(type):
                 continue
 
             # create product of all the iterators
-            keys = sorted(attribute.ittr.keys())
-            vals = sorted(attribute.ittr.values())
+            keys = attribute.ittr.keys()
+            vals = attribute.ittr.values()
             all_combos = product(*vals)
 
             products = []

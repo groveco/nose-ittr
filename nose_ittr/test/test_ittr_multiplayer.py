@@ -25,11 +25,12 @@ class TestMetaClassIttrMultiplayer(object):
         """
         Test metaclass set ittr attributes in mirrors functions
         """
-        ok_(hasattr(self.test_class_one.test_method_8_val_a_val_b_val_c,
+        print(dir(self.test_class_one))
+        ok_(hasattr(self.test_class_one.test_method_8_val_c_val_a_val_b,
                     'attr_one'))
-        ok_(hasattr(self.test_class_one.test_method_8_val_a_val_b_val_c,
+        ok_(hasattr(self.test_class_one.test_method_8_val_c_val_a_val_b,
                     'attr_two'))
-        ok_(hasattr(self.test_class_one.test_method_8_val_a_val_b_val_c,
+        ok_(hasattr(self.test_class_one.test_method_8_val_c_val_a_val_b,
                     'attr_three'))
 
     @attr(id=2)
@@ -38,11 +39,11 @@ class TestMetaClassIttrMultiplayer(object):
         Tests metaclass adds ittr attribute to test
         """
         assert_in('attr_one',
-                  self.test_class_one.test_method_8_val_a_val_b_val_c.ittr)
+                  self.test_class_one.test_method_8_val_c_val_a_val_b.ittr)
         assert_in('attr_two',
-                  self.test_class_one.test_method_8_val_a_val_b_val_c.ittr)
+                  self.test_class_one.test_method_8_val_c_val_a_val_b.ittr)
         assert_in('attr_three',
-                  self.test_class_one.test_method_8_val_a_val_b_val_c.ittr)
+                  self.test_class_one.test_method_8_val_c_val_a_val_b.ittr)
 
     @attr(id=3)
     def test_self_modification_by_test_method(self):
@@ -58,6 +59,7 @@ class TestMetaClassIttrMultiplayer(object):
         """
         Check that the suffix created correctly
         """
+        print(dir(self.test_class_one))
         ok_(hasattr(self.test_class_one, 'test_method_1'))
         ok_(hasattr(self.test_class_one, 'test_method_2'))
         ok_(hasattr(self.test_class_one, 'test_method_3'))
@@ -67,12 +69,12 @@ class TestMetaClassIttrMultiplayer(object):
         ok_(hasattr(self.test_class_one, 'test_method_7_val_a_val_c'))
         ok_(hasattr(self.test_class_one, 'test_method_7_val_b_val_c'))
         ok_(hasattr(self.test_class_one, 'test_method_7_val_b_val_c'))
-        ok_(hasattr(self.test_class_one, 'test_method_8_val_a_val_b_val_c'))
-        ok_(hasattr(self.test_class_one, 'test_method_8_val_a_val_b_val_d'))
+        ok_(hasattr(self.test_class_one, 'test_method_8_val_c_val_a_val_b'))
+        ok_(hasattr(self.test_class_one, 'test_method_8_val_d_val_a_val_b'))
         ok_(hasattr(self.test_class_one, 'test_method_9_val_a_val_c'))
         ok_(hasattr(self.test_class_one, 'test_method_9_val_b_val_c'))
         ok_(hasattr(self.test_class_one, 'test_method_9_val_b_val_c'))
-        ok_(hasattr(self.test_class_one, 'test_method_10_val_a_val_b_val_d'))
+        ok_(hasattr(self.test_class_one, 'test_method_10_val_a_val_d_val_b'))
         ok_(hasattr(self.test_class_one, 'test_method_11_val_a__'))
 
     @attr(id=5)
@@ -102,10 +104,10 @@ class TestMetaClassIttrMultiplayer(object):
     def test_class_decorator(self):
         ok_(hasattr(self.test_class_two, 'test_method_1_linux'))
         ok_(hasattr(self.test_class_two, 'test_method_1_mac'))
-        ok_(hasattr(self.test_class_two, 'test_method_2_linux_val_a'))
-        ok_(hasattr(self.test_class_two, 'test_method_2_mac_val_a'))
-        ok_(hasattr(self.test_class_two, 'test_method_2_linux_val_b'))
-        ok_(hasattr(self.test_class_two, 'test_method_2_mac_val_b'))
+        ok_(hasattr(self.test_class_two, 'test_method_2_val_a_linux'))
+        ok_(hasattr(self.test_class_two, 'test_method_2_val_a_mac'))
+        ok_(hasattr(self.test_class_two, 'test_method_2_val_b_linux'))
+        ok_(hasattr(self.test_class_two, 'test_method_2_val_b_mac'))
 
 
 
